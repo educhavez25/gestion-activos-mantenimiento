@@ -1,0 +1,420 @@
+{
+  "info": {
+    "_postman_id": "a9c1e7a4-2e11-4f10-bc52-gest-activos-v1",
+    "name": "Gestión de Activos y Mantenimiento API v1",
+    "description": "Colección completa de endpoints RESTful para la gestión empresarial de activos, incidencias, mantenimientos y analíticas de KPIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Autenticación & Sesión",
+      "item": [
+        {
+          "name": "POST Login (Administrador)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.environment.set('token', jsonData.data.token);",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "POST Login (Supervisor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"supervisor@example.com\",\n  \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "POST Registro de Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Carlos Santana\",\n  \"email\": \"carlos@example.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "GET Perfil Actual (/me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "POST Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Dashboard & KPIs",
+      "item": [
+        {
+          "name": "GET Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "dashboard", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Módulo de Activos",
+      "item": [
+        {
+          "name": "GET Listar Activos (Paginado + Filtros)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/assets?status=active&sort_by=created_at&sort_direction=desc&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "assets"],
+              "query": [
+                { "key": "status", "value": "active" },
+                { "key": "sort_by", "value": "created_at" },
+                { "key": "sort_direction", "value": "desc" },
+                { "key": "page", "value": "1" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST Crear Activo",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"ACT-SERV-009\",\n  \"name\": \"Servidor Dell PowerEdge R750\",\n  \"description\": \"Servidor dedicado para bases de datos principales.\",\n  \"category_id\": 1,\n  \"location_id\": 1,\n  \"assigned_user_id\": 19,\n  \"status\": \"active\",\n  \"purchase_date\": \"2026-01-15\",\n  \"cost\": 4500.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/assets",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "assets"]
+            }
+          }
+        },
+        {
+          "name": "GET Detalle de Activo",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/assets/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "assets", "1"]
+            }
+          }
+        },
+        {
+          "name": "PUT Actualizar Activo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Servidor Dell PowerEdge R750 (Upgrade RAM)\",\n  \"status\": \"active\",\n  \"cost\": 5200.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/assets/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "assets", "1"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Eliminar Activo (Soft Delete - Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/assets/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "assets", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Módulo de Incidencias",
+      "item": [
+        {
+          "name": "GET Listar Incidencias",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/incidents?severity=critical&status=open",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "incidents"],
+              "query": [
+                { "key": "severity", "value": "critical" },
+                { "key": "status", "value": "open" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST Reportar Incidencia",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_id\": 1,\n  \"title\": \"Falla en fuente redundante\",\n  \"description\": \"La fuente secundaria dejó de responder tras corte de energía.\",\n  \"severity\": \"critical\",\n  \"assigned_technician_id\": 19\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/incidents",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "incidents"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Cambiar Estado de Incidencia",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"resolved\",\n  \"resolution_notes\": \"Se sustituyó el módulo de fuente de poder defectuoso.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/incidents/1/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "incidents", "1", "status"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Módulo de Mantenimientos",
+      "item": [
+        {
+          "name": "GET Listar Mantenimientos",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/maintenances?status=scheduled",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "maintenances"],
+              "query": [
+                { "key": "status", "value": "scheduled" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST Programar Mantenimiento",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_id\": 1,\n  \"technician_id\": 19,\n  \"type\": \"preventive\",\n  \"status\": \"scheduled\",\n  \"description\": \"Mantenimiento semestral preventivo y limpieza de disipadores.\",\n  \"scheduled_date\": \"2026-10-01 09:00:00\",\n  \"cost\": 150.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/maintenances",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "maintenances"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Catálogos y Usuarios",
+      "item": [
+        {
+          "name": "GET Categorías",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories"]
+            }
+          }
+        },
+        {
+          "name": "GET Ubicaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/locations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "locations"]
+            }
+          }
+        },
+        {
+          "name": "GET Usuarios (Filtro por Rol)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users?role=tecnico",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users"],
+              "query": [
+                { "key": "role", "value": "tecnico" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Roles",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/roles",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "roles"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
