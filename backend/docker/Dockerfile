@@ -42,8 +42,9 @@ RUN composer install --no-dev --no-interaction --no-scripts --prefer-dist --opti
 # Copiar el resto del código fuente del backend
 COPY . .
 
-# Ajustar permisos para storage y bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+# Crear directorios y ajustar permisos para storage y bootstrap/cache
+RUN mkdir -p /var/www/html/storage/framework/{sessions,views,cache} /var/www/html/storage/logs /var/www/html/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Exponer puerto FPM
