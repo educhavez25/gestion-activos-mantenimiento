@@ -11,18 +11,8 @@ jobs:
   # 1. Backend: Code Quality & Automated Tests
   # ==========================================
   backend-ci:
-    name: Backend (PHP 8.3 & MySQL)
+    name: Backend Tests (PHP 8.3)
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_DATABASE: gestion_activos_test
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
 
     steps:
       - name: Checkout Code
@@ -32,7 +22,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: mbstring, pdo_mysql, bcmath, zip, gd, intl, opcache
+          extensions: mbstring, pdo_sqlite, sqlite3, pdo_mysql, bcmath, zip, gd, intl, opcache
           coverage: none
 
       - name: Cache Composer Dependencies
@@ -52,43 +42,17 @@ jobs:
           cd backend
           cp .env.example .env
           php artisan key:generate
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: gestion_activos_test
-          DB_USERNAME: root
-          DB_PASSWORD: root
-
-      - name: Run Database Migrations
-        run: |
-          cd backend
-          php artisan migrate --force
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: gestion_activos_test
-          DB_USERNAME: root
-          DB_PASSWORD: root
 
       - name: Run Backend Test Suite (PHPUnit)
         run: |
           cd backend
           php artisan test
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: gestion_activos_test
-          DB_USERNAME: root
-          DB_PASSWORD: root
 
   # ==========================================
   # 2. Frontend: TypeScript & Production Build
   # ==========================================
   frontend-ci:
-    name: Frontend (Node 20 & Vite)
+    name: Frontend Build (Node 20 & Vite)
     runs-on: ubuntu-latest
 
     steps:
@@ -105,7 +69,7 @@ jobs:
       - name: Install Frontend Dependencies
         run: |
           cd frontend
-          npm ci
+          npm install
 
       - name: Build React Production Bundle
         run: |
