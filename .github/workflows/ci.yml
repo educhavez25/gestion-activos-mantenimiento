@@ -11,17 +11,17 @@ jobs:
   # 1. Backend: Code Quality & Automated Tests
   # ==========================================
   backend-ci:
-    name: Backend Tests (PHP 8.3)
+    name: Backend Tests (PHP 8.2)
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup PHP 8.3
+      - name: Setup PHP 8.2
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.2'
           extensions: mbstring, pdo_sqlite, sqlite3, pdo_mysql, bcmath, zip, gd, intl, opcache
           coverage: none
 
