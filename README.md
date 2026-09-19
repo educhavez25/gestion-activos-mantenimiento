@@ -2,7 +2,7 @@
 > **Sistema Integral de Gestión de Activos Fijos, Incidencias Críticas y Mantenimiento Preventivo/Correctivo para Entornos Industriales.**
 
 ![CI/CD Pipeline](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=github-actions&logoColor=white)
-![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white)
+![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white)
 ![Laravel 11](https://img.shields.io/badge/Laravel-11.x-FF2D20?logo=laravel&logoColor=white)
 ![React 19](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
@@ -10,6 +10,9 @@
 ![MySQL 8.0](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker&logoColor=white)
 ![Tests](https://img.shields.io/badge/Tests-37_Passing_(150_Assertions)-44CC11?logo=checkmarx&logoColor=white)
+[![Specifications](https://img.shields.io/badge/Documentation-SYSTEM__SPECIFICATIONS.md-blue?logo=markdown&logoColor=white)](./SYSTEM_SPECIFICATIONS.md)
+
+> 📖 **Documento Completo de Especificaciones y Entrega:** Consulta [SYSTEM_SPECIFICATIONS.md](./SYSTEM_SPECIFICATIONS.md) para ver la especificación detallada de Requerimientos Funcionales (RF), Requerimientos No Funcionales (RNF), Diagramas ERD y Matriz RBAC.
 
 ---
 
